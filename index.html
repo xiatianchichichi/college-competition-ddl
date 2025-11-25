@@ -471,108 +471,28 @@
 
     <script>
         // 竞赛数据
-        const competitions = [
-            {
-                id: 1,
-                title: 'CUMCM',
-                name: '全国大学生数学建模竞赛',
-                category: '数学建模',
-                level: 'A',
-                deadline: '2025-09-15 17:00:00',
-                website: 'http://www.mcm.edu.cn/',
-                tags: ['科研学术', '团队', '数学']
-            },
-            {
-                id: 2,
-                title: 'Internet+',
-                name: '中国国际"互联网+"大学生创新创业大赛',
-                category: '创新创业',
-                level: 'A',
-                deadline: '2025-08-20 23:59:59',
-                website: 'https://cy.ncss.cn/',
-                tags: ['创业', '项目', '创新']
-            },
-            {
-                id: 3,
-                title: 'NUEDC',
-                name: '全国大学生电子设计竞赛',
-                category: '电子设计',
-                level: 'A',
-                deadline: '2025-08-10 12:00:00',
-                website: 'http://www.nuedc.com.cn/',
-                tags: ['硬件', '团队', '电路']
-            },
-            {
-                id: 4,
-                title: 'ACM-ICPC',
-                name: 'ACM国际大学生程序设计竞赛',
-                category: '程序设计',
-                level: 'S',
-                deadline: '2025-10-30 23:59:59',
-                website: 'https://icpc.global/',
-                tags: ['算法', '团队', '国际', '编程']
-            },
-            {
-                id: 5,
-                title: 'CMIDC',
-                name: '全国大学生机械创新设计大赛',
-                category: '机械设计',
-                level: 'A',
-                deadline: '2025-07-15 18:00:00',
-                website: 'http://umic.ckcest.cn/',
-                tags: ['创新', '团队', '机械']
-            },
-            {
-                id: 6,
-                title: 'Challenge Cup',
-                name: '"挑战杯"全国大学生课外学术科技作品竞赛',
-                category: '科技创新',
-                level: 'A',
-                deadline: '2025-06-30 23:59:59',
-                website: 'http://www.tiaozhanbei.net/',
-                tags: ['科研', '论文', '团队']
-            },
-            {
-                id: 7,
-                title: 'NCAC',
-                name: '全国大学生广告艺术大赛',
-                category: '艺术设计',
-                level: 'B',
-                deadline: '2025-06-01 23:59:59',
-                website: 'http://www.sun-ada.net/',
-                tags: ['创意', '设计', '广告']
-            },
-            {
-                id: 8,
-                title: 'NECCS',
-                name: '全国大学生英语竞赛',
-                category: '语言能力',
-                level: 'B',
-                deadline: '2025-04-15 12:00:00',
-                website: 'http://www.chinaneccs.cn/',
-                tags: ['语言', '个人', '英语']
-            },
-            {
-                id: 9,
-                title: 'CCCCC',
-                name: '中国大学生计算机设计大赛',
-                category: '程序设计',
-                level: 'B',
-                deadline: '2025-05-20 23:59:59',
-                website: 'http://www.c4best.cn/',
-                tags: ['编程', '软件', '团队']
-            },
-            {
-                id: 10,
-                title: 'LanQiao Cup',
-                name: '"蓝桥杯"全国软件和信息技术专业人才大赛',
-                category: '程序设计',
-                level: 'C',
-                deadline: '2025-03-25 23:59:59',
-                website: 'https://www.lanqiao.cn/',
-                tags: ['编程', '个人', '算法']
+        let competitions = [];
+
+        // 加载数据
+        async function loadData() {
+            try {
+                const response = await fetch('competitions.json');
+                competitions = await response.json();
+                updateDate();
+                initFilters();
+                filterData();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                document.getElementById('tableBody').innerHTML = `
+                    <tr><td colspan="6" style="text-align:center;padding:48px;color:#ef4444;">
+                        加载失败，请检查数据文件
+                    </td></tr>
+                `;
             }
-        ];
+        }
+        
+        // 页面加载完成后执行
+        window.addEventListener('DOMContentLoaded', loadData);
 
         // 计算倒计时
         function calculateDaysLeft(deadline) {
